@@ -1,0 +1,27 @@
+{
+  "name": "api-testing-restful-booker",
+  "version": "1.0.0",
+  "description": "Automated REST API tests for the Restful-booker practice API",
+  "main": "index.js",
+  
+    "scripts": {
+    "test": "mocha \"tests/**/*.test.js\" --timeout 10000"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UlianaStah/api-testing-restful-booker.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/UlianaStah/api-testing-restful-booker/issues"
+  },
+  "homepage": "https://github.com/UlianaStah/api-testing-restful-booker#readme",
+  "devDependencies": {
+    "axios": "^1.21.1",
+    "chai": "^6.3.0",
+    "mocha": "^12.0.3"
+  }
+}
