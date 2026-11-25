@@ -12,7 +12,7 @@
 |TC-07  | Get an existing booking by ID                 | POST a booking, then GET /booking/{id}                        | 200, data matches what was sent                 | 200, OK            |
 |TC-08  | Get a booking that doesn't exist              | GET /booking/99999999                                         | 404, booking not found                          | 404, as expected |
 |TC-09  | Create a booking with valid data              | POST /booking with a full JSON body                           | 200, response has a bookingid                   | 200, with booking id|
-|TC-10  | Create a booking without first name           | POST /booking with first name missing                         | Error status (4xx), booking is not created      |500, Interval Server Error|
+|TC-10  | Create a booking without first name           | POST /booking with first name missing                         | Error status (4xx), booking is not created      |500, Internal Server Error|
 |TC-11  | Create a booking with totalprice as text      | POST /booking with "totalprice": "abc"                        | Error status (4xx), booking is not created      | 200,"totalprice":null|
 |TC-12  | Update the booking with a token               | PUT /booking/{id} with a new firstname and a Cookie header    | 200, first name is changed                      | 200, OK            |
 |TC-13  | Update the booking without token              | PUT /booking/{id}, with a new firstname and no Cookie header  | 403                                             | 403, Forbidden     |
