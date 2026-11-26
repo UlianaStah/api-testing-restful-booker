@@ -1,5 +1,5 @@
 import axios from 'axios' ;
-import { BASE_URL, USERNAME, PASSWORD } from './config';
+import { BASE_URL, USERNAME, PASSWORD } from './config.js';
 
 export async function getToken() {
     const response = await axios.post(`${BASE_URL}/auth`, {

@@ -1,7 +1,8 @@
 import axios from "axios";
 import { expect } from "chai";
 import { BASE_URL } from "../helpers/config.js";
-import { validBooking, createBooking, getBooking } from "../helpers/booking.js";
+import { validBooking, createBooking, getBooking, updateBooking, patchBooking, deleteBooking } from "../helpers/booking.js";
+import { getToken } from "../helpers/auth.js";
 
 describe('Booking - read and create', () => {
 
@@ -69,5 +70,76 @@ describe('Booking - read and create', () => {
         const response = await createBooking({...validBooking, totalprice: 'abc'});
 
         expect(response.status).to.be.within(400,499);
-    })
+    });
+
+    it('TC-12: successfully updates a booking with token', async () => {
+        const created = await createBooking();
+        const bookingId = created.data.bookingid;
+        const token = await getToken();
+        const updated = {...validBooking, firstname: 'Maria'};
+        const response = await updateBooking(bookingId, updated, token);
+
+        expect(response.status).to.equal(200);
+        expect(response.data.firstname).to.equal('Maria');        
+    });
+
+    it('TC-13: rejects the update of a booking wothout token', async () => {
+        const created = await createBooking();
+        const bookingId = created.data.bookingid;
+        const updated = {...validBooking, firstname: 'Maria'};
+        const response = await updateBooking(bookingId, updated);
+
+        expect(response.status).to.equal(403);
+    });
+
+    it('TC-14: successful partial update of a booking with token', async () => {
+        const created = await createBooking();
+        const bookingId = created.data.bookingid;
+        const token = await getToken();
+        const patial = { firstname: 'Maria' };
+        const response = await patchBooking(bookingId, patial, token);
+
+        expect(response.status).to.equal(200);
+        expect(response.data.firstname).to.equal('Maria');
+        expect(response.data.lastname).to.equal(validBooking.lastname);
+        expect(response.data.totalprice).to.equal(validBooking.totalprice);
+    });
+
+    it('TC-15: rejects the partial update of a booking without token', async () => {
+        const created = await createBooking();
+        const bookingId = created.data.bookingid;
+        const partial = {firstname: 'Maria'};
+        const response = await patchBooking(bookingId, partial);
+
+        expect(response.status).to.equal(403);
+    });
+
+    it('TC-16: successfully deletes a booking with token', async () => {
+        const created = await createBooking();
+        const bookingId = created.data.bookingid;
+        const token = await getToken();
+        const response = await deleteBooking(bookingId, token);
+
+        expect(response.status).to.equal(201);
+    });
+
+    it('TC-17: rejects deleting a booking without token', async () => {
+        const created = await createBooking();
+        const bookingId = created.data.bookingid;
+        const response = await deleteBooking(bookingId);
+
+        expect(response.status).to.equal(403);
+    });
+
+    it('TC-18: returns a 404 for deleted booking', async () => {
+        const created = await createBooking();
+        const bookingId = created.data.bookingid;
+        const token = await getToken();
+        const deleted = await deleteBooking(bookingId, token);
+        const response = await getBooking(bookingId);
+
+        expect(deleted.status).to.equal(201);
+        expect(response.status).to.equal(404);
+    });
+
 });
